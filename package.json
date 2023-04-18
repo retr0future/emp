@@ -1,0 +1,43 @@
+{
+  "name": "emp",
+  "version": "1.0.0",
+  "description": "SPA",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server .",
+    "build": "Webpack .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/retr0future/emp.git"
+  },
+  "author": "KY",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/retr0future/emp/issues"
+  },
+  "homepage": "https://github.com/retr0future/emp#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.21.0",
+    "@babel/core": "^7.21.4",
+    "@babel/eslint-parser": "^7.21.3",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/runtime": "^7.21.0",
+    "babel-loader": "^9.1.2",
+    "eslint": "^8.38.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-jest": "^27.2.1",
+    "path": "^0.12.7",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.3"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.21.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
