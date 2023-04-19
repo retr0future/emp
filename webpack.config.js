@@ -5,7 +5,8 @@ module.exports={
     entry: "./index.js", 
     output: {
         path: path.resolve(__dirname, "public"),
-        filename: "main.js"
+        filename: "main.js",
+        publicPath: "/"
     },
     target: "web",
     devServer: {
@@ -13,7 +14,8 @@ module.exports={
         static: ["./public"],
         open: true,
         hot: true ,
-        liveReload: true
+        liveReload: true,
+        historyApiFallback: true
     },
     resolve: {
         extensions: ['.js','.jsx','.json', '.css'] 
