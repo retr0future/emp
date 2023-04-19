@@ -16,7 +16,7 @@ module.exports={
         liveReload: true
     },
     resolve: {
-        extensions: ['.js','.jsx','.json'] 
+        extensions: ['.js','.jsx','.json', 'css'] 
     },
     module:{
         rules: [
@@ -24,6 +24,10 @@ module.exports={
                 test: /\.(js|jsx)$/,    
                 exclude: /node_modules/, 
                 use:  'babel-loader' 
+            },
+            { 
+                test: /\.css$/, 
+                use: ['style-loader', 'css-loader'] 
             }
         ]
     }

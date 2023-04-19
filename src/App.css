@@ -1,0 +1,13 @@
+td, tr, th {
+  border: 1px solid;
+}
+.headRow {
+  background-color: #e6e1e1;
+}
+.fallback {
+  text-align: center;
+}
+.table {
+  border-collapse: collapse;
+  margin: 0 auto;
+}

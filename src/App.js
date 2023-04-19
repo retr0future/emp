@@ -1,9 +1,10 @@
 import React from "react";
-
+import './App.css';
 const App = () => {
   return (
-    <table>
-      <tr>
+    <table className="table">
+      <thead>
+      <tr className="headRow">
         <th>id</th>
         <th>status</th>
         <th>created_at</th>
@@ -14,6 +15,7 @@ const App = () => {
         <th>card_number</th>
         <th>amount</th>
       </tr>
+      </thead>
     </table>
   );
 };
