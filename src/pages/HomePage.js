@@ -4,18 +4,58 @@ import "./HomePage.css";
 import PaymentTransactions from "../PaymentTransactions";
 import { Link } from "react-router-dom";
 import { getData } from "../store/data";
+import SearchArea from "../components/SearchArea";
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState("asc");
   const [data, setData] = useState([]);
-  useEffect(() => {
+  const errorClassMap = {
+    "Module::SystemError": "System",
+    "Module::RemoteError": "Remote",
+    "Module::ConfigurationError": "Unknown",
+  };
+  const transactionsMapper = (transactions) => {
+    return transactions.map((transaction) => ({
+      id: transaction.id,
+      status: transaction.status,
+      created_at: new Date(transaction.created_at)
+        .toLocaleString("en-GB", {
+          year: "2-digit",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+        .replace(",", "")
+        .replace(/\//g, "-"),
+      merchant_name: transaction.merchant_name,
+      type: transaction.type.replace("Transaction", ""),
+      error_class: transaction.error_class ? errorClassMap[transaction.error_class] : "",
+      card_holder: transaction.card_holder,
+      card_number: transaction.card_number,
+      amount: parseFloat(transaction.amount / 100).toFixed(2),
+      currency: transaction.currency,
+      isoDate: transaction.created_at
+    }));
+  };
+
+  const initializeData = () => {
     const paymentTransactions = new PaymentTransactions();
     const transactions = paymentTransactions.getTransactions();
+    const mappedTransactions = transactionsMapper(transactions);
+    setData(mappedTransactions);
     dispatch(getData(transactions));
-    setData(transactions);
+  }
+  useEffect(() => {
+   /*  const paymentTransactions = new PaymentTransactions();
+    const transactions = paymentTransactions.getTransactions();
+    const mappedTransactions = transactionsMapper(transactions);
+    setData(mappedTransactions);
+    dispatch(getData(transactions)); */
+    initializeData();
   }, []);
-   const handleSort = (col) => {
+  const handleSort = (col) => {
     if (order === "asc") {
       const sorted = [...data].sort((a, b) => (a[col] > b[col] ? 1 : -1));
       setData(sorted);
@@ -26,63 +66,58 @@ const HomePage = () => {
       setData(sorted);
       setOrder("asc");
     }
-  }; 
-  const errorClassMap = {
-    "Module::SystemError": "System",
-    "Module::RemoteError": "Remote",
-    "Module::ConfigurationError": "Unknown",
   };
-  
+  const columns = [
+    "id",
+    "status",
+    "created_at",
+    "merchant_name",
+    "type",
+    "error_class",
+    "card_holder",
+    "card_number",
+    "amount",
+  ];
   return (
-    <table className="table">
-      <thead>
-        <tr className="headRow">
-          <th>ID</th>
-          <th onClick={() => handleSort("status")}>Status</th>
-          <th onClick={() => handleSort("status")}>Status</th>
-          <th onClick={() => handleSort("status")}>Status</th>
-          <th onClick={() => handleSort("status")}>Status</th>
-          <th onClick={() => handleSort("created_at")}>Created At</th>
-          <th onClick={() => handleSort("merchant_name")}>Merchant Name</th>
-          <th onClick={() => handleSort("type")}>Type</th>
-          <th onClick={() => handleSort("error_class")}>Error Class</th>
-          <th onClick={() => handleSort("card_holder")}>Card Holder</th>
-          <th onClick={() => handleSort("card_number")}>Card Number</th>
-          <th onClick={() => handleSort("amount")}>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((transaction) => (
-          <tr key={transaction.id}>
-            <td>{transaction.id}</td>
-            <td>{transaction.status}</td>
-            <td>
-              <Link to={`/transaction/${transaction.id}`}>
-                {new Date(transaction.created_at)
-                  .toLocaleString("en-GB", {
-                    year: "2-digit",
-                    month: "2-digit",
-                    day: "2-digit",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })
-                  .replace(",", "")
-                  .replace(/\//g, "-")}
-              </Link>
-            </td>
-            <td>{transaction.merchant_name}</td>
-            <td>{transaction.type.replace("Transaction", "")}</td>
-            <td>{errorClassMap[transaction.error_class]}</td>
-            <td>{transaction.card_holder}</td>
-            <td>{transaction.card_number}</td>
-            <td>
-              {parseFloat(transaction.amount / 100).toFixed(2)}{" "}
-              {transaction.currency}
-            </td>
+    <>
+      <SearchArea columns={columns} transactions={data} setTransactionsData={setData} resetData ={initializeData}/>
+      <table className="table">
+        <thead>
+          <tr className="headRow">
+            <th>ID</th>
+            <th onClick={() => handleSort("status")}>Status</th>
+            <th onClick={() => handleSort("created_at")}>Created At</th>
+            <th onClick={() => handleSort("merchant_name")}>Merchant Name</th>
+            <th onClick={() => handleSort("type")}>Type</th>
+            <th onClick={() => handleSort("error_class")}>Error Class</th>
+            <th onClick={() => handleSort("card_holder")}>Card Holder</th>
+            <th onClick={() => handleSort("card_number")}>Card Number</th>
+            <th onClick={() => handleSort("amount")}>Amount</th>
+            <th onClick={() => handleSort("currency")}>Currency</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {data.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>{transaction.id}</td>
+              <td>{transaction.status}</td>
+              <td>
+                <Link to={`/transaction/${transaction.id}`}>
+                  {transaction.created_at}
+                </Link>
+              </td>
+              <td>{transaction.merchant_name}</td>
+              <td>{transaction.type}</td>
+              <td>{transaction.error_class}</td>
+              <td>{transaction.card_holder}</td>
+              <td>{transaction.card_number}</td>
+              <td>{transaction.amount}</td>
+              <td>{transaction.currency}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 };
 

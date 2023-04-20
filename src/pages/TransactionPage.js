@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const TransactionPage = () => {
   const { id } = useParams();
   const { data } = useSelector((state) => state.data);
-  const transaction = data.find((tr) => tr.id == id);
+  const transaction = data.find((tr) => tr.id === Number(id));
   return (
     <>
       <h1>Transaction details for transaction {id}</h1>
@@ -32,19 +32,19 @@ const TransactionPage = () => {
         </thead>
         <tbody>
           <tr>
-          <td>{transaction.id}</td>
-          <td>{transaction.status}</td>
-          <td>{transaction.created_at}</td>
-          <td>{transaction.merchant_name}</td>
-          <td>{transaction.terminal_name}</td>
-          <td>{transaction.type}</td>
-          <td>{transaction.error_class}</td>
-          <td>{transaction.error_message}</td>
-          <td>{transaction.card_holder}</td>
-          <td>{transaction.card_number}</td>
-          <td>{transaction.amount}</td>
-          <td>{transaction.currency}</td>
-          <td>{transaction.unique_id}</td>
+            <td>{transaction.id}</td>
+            <td>{transaction.status}</td>
+            <td>{transaction.created_at}</td>
+            <td>{transaction.merchant_name}</td>
+            <td>{transaction.terminal_name}</td>
+            <td>{transaction.type}</td>
+            <td>{transaction.error_class}</td>
+            <td>{transaction.error_message}</td>
+            <td>{transaction.card_holder}</td>
+            <td>{transaction.card_number}</td>
+            <td>{transaction.amount}</td>
+            <td>{transaction.currency}</td>
+            <td>{transaction.unique_id}</td>
           </tr>
         </tbody>
       </table>
