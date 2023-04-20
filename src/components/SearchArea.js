@@ -1,30 +1,44 @@
 import React, { useState } from "react";
+import "./SearchArea.css";
 
-const SearchArea = ({
-  columns,
-  transactions,
-  setTransactionsData,
-  resetData,
-}) => {
+const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [filters, setFilters] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState();
   const [matchBy, setMatchBy] = useState("equal");
   const [value, setValue] = useState("");
   const [results, setSearchResults] = useState([]);
+  const [columns, setColumns] = useState([
+    "id",
+    "status",
+    "created_at",
+    "merchant_name",
+    "type",
+    "error_class",
+    "card_holder",
+    "card_number",
+    "amount",
+  ]);
 
   const handleAddFilter = () => {
     if (!selectedColumn) return;
     if (filters.some((filter) => filter.column === selectedColumn)) return;
     setFilters([...filters, { column: selectedColumn, matchBy, value }]);
-    setSelectedColumn(null);
+    setSelectedColumn("");
     setMatchBy("equal");
     setValue("");
+  };
+  const handleSelectColumn = (e) => {
+    const selected = e.target.value;
+    setSelectedColumn(selected);
+    const newColumns = columns.filter((column) => column !== selected);
+    setColumns(newColumns);
   };
 
   const handleRemoveFilter = (index) => {
     const newFilters = [...filters];
     newFilters.splice(index, 1);
     setFilters(newFilters);
+    setColumns([...columns, filters[index].column]);
   };
   const handleReset = () => {
     resetData();
@@ -64,9 +78,9 @@ const SearchArea = ({
     setSearchResults(filteredTransactions);
     setTransactionsData(filteredTransactions);
   };
-  console.log(results);
+
   return (
-    <div>
+    <div className="SearchBar">
       <label htmlFor="date-range">Date range:</label>
       <input
         type="datetime-local"
@@ -80,7 +94,7 @@ const SearchArea = ({
         id="filters"
         name="filters"
         value={selectedColumn}
-        onChange={(e) => setSelectedColumn(e.target.value)}
+        onChange={handleSelectColumn}
       >
         <option value="" disabled>
           Select a filter
@@ -113,7 +127,7 @@ const SearchArea = ({
           </button>
         </div>
       )}
-      <div>
+      <div className="FilterBar">
         {filters.map((filter, index) => (
           <div key={index}>
             <span>
@@ -124,13 +138,13 @@ const SearchArea = ({
             </button>
           </div>
         ))}
+        <button type="button" onClick={handleSearch}>
+          Search
+        </button>
+        <button type="button" onClick={handleReset}>
+          Reset
+        </button>
       </div>
-      <button type="button" onClick={handleSearch}>
-        Search
-      </button>
-      <button type="button" onClick={handleReset}>
-        Reset
-      </button>
     </div>
   );
 };

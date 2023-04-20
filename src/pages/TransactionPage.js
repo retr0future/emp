@@ -1,13 +1,14 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import "./TransactionPage.css";
 
 const TransactionPage = () => {
   const { id } = useParams();
   const { data } = useSelector((state) => state.data);
   const transaction = data.find((tr) => tr.id === Number(id));
   return (
-    <>
+    <div className="TransactionPage">
       <h1>Transaction details for transaction {id}</h1>
       <p>
         Go to <Link to="/">Home</Link>.
@@ -48,7 +49,7 @@ const TransactionPage = () => {
           </tr>
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

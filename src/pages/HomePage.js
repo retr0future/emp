@@ -31,12 +31,14 @@ const HomePage = () => {
         .replace(/\//g, "-"),
       merchant_name: transaction.merchant_name,
       type: transaction.type.replace("Transaction", ""),
-      error_class: transaction.error_class ? errorClassMap[transaction.error_class] : "",
+      error_class: transaction.error_class
+        ? errorClassMap[transaction.error_class]
+        : "",
       card_holder: transaction.card_holder,
       card_number: transaction.card_number,
       amount: parseFloat(transaction.amount / 100).toFixed(2),
       currency: transaction.currency,
-      isoDate: transaction.created_at
+      isoDate: transaction.created_at,
     }));
   };
 
@@ -46,13 +48,8 @@ const HomePage = () => {
     const mappedTransactions = transactionsMapper(transactions);
     setData(mappedTransactions);
     dispatch(getData(transactions));
-  }
+  };
   useEffect(() => {
-   /*  const paymentTransactions = new PaymentTransactions();
-    const transactions = paymentTransactions.getTransactions();
-    const mappedTransactions = transactionsMapper(transactions);
-    setData(mappedTransactions);
-    dispatch(getData(transactions)); */
     initializeData();
   }, []);
   const handleSort = (col) => {
@@ -67,20 +64,13 @@ const HomePage = () => {
       setOrder("asc");
     }
   };
-  const columns = [
-    "id",
-    "status",
-    "created_at",
-    "merchant_name",
-    "type",
-    "error_class",
-    "card_holder",
-    "card_number",
-    "amount",
-  ];
   return (
     <>
-      <SearchArea columns={columns} transactions={data} setTransactionsData={setData} resetData ={initializeData}/>
+      <SearchArea
+        transactions={data}
+        setTransactionsData={setData}
+        resetData={initializeData}
+      />
       <table className="table">
         <thead>
           <tr className="headRow">
