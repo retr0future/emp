@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import "./SearchArea.css";
 
 const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
@@ -6,19 +7,9 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [selectedColumn, setSelectedColumn] = useState();
   const [matchBy, setMatchBy] = useState("equal");
   const [value, setValue] = useState("");
+  const filteredColumns = useSelector(({ data }) => data.filteredColumns);
   const [results, setSearchResults] = useState([]);
-  const [columns, setColumns] = useState([
-    "id",
-    "status",
-    "created_at",
-    "merchant_name",
-    "type",
-    "error_class",
-    "card_holder",
-    "card_number",
-    "amount",
-  ]);
-
+  const [columns, setColumns] = useState(filteredColumns);
   const handleAddFilter = () => {
     if (!selectedColumn) return;
     if (filters.some((filter) => filter.column === selectedColumn)) return;
@@ -30,32 +21,60 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const handleSelectColumn = (e) => {
     const selected = e.target.value;
     setSelectedColumn(selected);
-    const newColumns = columns.filter((column) => column !== selected);
-    setColumns(newColumns);
+    const updatedColumns = columns.map((column) => {
+      if (column.columnName === selected) {
+        return { ...column, show: false };
+      }
+      return column;
+    });
+    setColumns(updatedColumns);
   };
-
   const handleRemoveFilter = (index) => {
     const newFilters = [...filters];
     newFilters.splice(index, 1);
     setFilters(newFilters);
-    setColumns([...columns, filters[index].column]);
+    const updatedColumns = columns.map((column) => {
+      if (column.columnName === filters[index].column) {
+        return { ...column, show: true };
+      }
+      return column;
+    });
+    setColumns(updatedColumns);
   };
   const handleReset = () => {
     resetData();
     setFilters([]);
+    setColumns(filteredColumns);
   };
   const handleSearch = (event) => {
     event.preventDefault();
     let filteredTransactions = [...transactions];
     const fromDate = new Date(document.getElementById("date-range-from").value);
-    const toDate = new Date(document.getElementById("date-range-to").value);
-    filteredTransactions = transactions.filter((transaction) => {
-      const transactionDate = new Date(transaction.isoDate);
-      return (
-        transactionDate.getTime() >= fromDate.getTime() &&
-        transactionDate.getTime() <= toDate.getTime()
-      );
-    });
+    const toDate =
+      new Date(document.getElementById("date-range-to").value) ===
+      "Invalid Date"
+        ? new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+            23,
+            59,
+            59
+          )
+        : new Date(document.getElementById("date-range-to").value);
+    if (
+      fromDate.toString() !== "Invalid Date" &&
+      toDate.toString() !== "Invalid Date"
+    ) {
+      filteredTransactions = transactions.filter((transaction) => {
+        const transactionDate = new Date(transaction.isoDate);
+        return (
+          transactionDate.getTime() >= fromDate.getTime() &&
+          transactionDate.getTime() <= toDate.getTime()
+        );
+      });
+    }
+
     filters.forEach((filter) => {
       const { column, matchBy, value } = filter;
       filteredTransactions = filteredTransactions.filter((transaction) => {
@@ -74,7 +93,6 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
         }
       });
     });
-
     setSearchResults(filteredTransactions);
     setTransactionsData(filteredTransactions);
   };
@@ -100,10 +118,10 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
           Select a filter
         </option>
         {columns
-          .filter((column) => column !== "created_at")
+          .filter((column) => column.show === true)
           .map((column) => (
-            <option key={column} value={column}>
-              {column}
+            <option key={column.id} value={column.columnName}>
+              {column.columnName}
             </option>
           ))}
       </select>
