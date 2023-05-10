@@ -1,5 +1,6 @@
 td, tr, th {
   border: 1px solid;
+  border-color: hsla(0,0%,100%,.2)!important;
 }
 .fallback {
   text-align: center;
@@ -7,4 +8,17 @@ td, tr, th {
 .table {
   border-collapse: collapse;
   margin: 0 auto;
+  background: url("../../public/blur-bg-blurred.jpg");
+  background-size: 100% 100%;
+  color: #fff;
+  box-shadow: 0 5px 5px 0 rgba(0,0,0,.25);
+  font-weight: 300;
+  font-size: 14px;
+  background-attachment: fixed;
+  border-radius: 5px;
+}
+body {
+  background-image: url("../../public/blur-bg.jpg");
+  background-size: cover; 
+  font: 14px/16px Roboto, sans-serif;
 }

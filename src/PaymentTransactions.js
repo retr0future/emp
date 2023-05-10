@@ -10,7 +10,7 @@ class PaymentTransactions {
   }
 
   getTransaction(id) {
-    return this.transactions.find(transaction => transaction.id === id);
+    return this.transactions.find((transaction) => transaction.id === id);
   }
 }
 export default PaymentTransactions;

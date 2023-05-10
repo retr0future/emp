@@ -1,9 +1,9 @@
-import React from "react";
-import { Link, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getData } from "../store/data";
-import "./TransactionPage.css";
-import PaymentTransactions from "../PaymentTransactions";
+import React from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getData } from '../store/data';
+import './TransactionPage.css';
+import PaymentTransactions from '../PaymentTransactions';
 
 const TransactionPage = () => {
   const { id } = useParams();
@@ -16,6 +16,7 @@ const TransactionPage = () => {
   };
   data.length === 0 && initializeData();
   const transaction = data.find((tr) => tr.id === Number(id));
+
   return (
     <div className="TransactionPage">
       <h1>Transaction details for transaction {id}</h1>

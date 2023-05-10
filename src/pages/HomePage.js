@@ -1,44 +1,42 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import "./HomePage.css";
-import PaymentTransactions from "../PaymentTransactions";
-import { Link } from "react-router-dom";
-import { getData } from "../store/data";
-import SearchArea from "../components/SearchArea";
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import './HomePage.css';
+import PaymentTransactions from '../PaymentTransactions';
+import { Link } from 'react-router-dom';
+import { getData } from '../store/data';
+import SearchArea from '../components/SearchArea';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const [order, setOrder] = useState("asc");
+  const [order, setOrder] = useState('asc');
   const [data, setData] = useState([]);
   const errorClassMap = {
-    "Module::SystemError": "System",
-    "Module::RemoteError": "Remote",
-    "Module::ConfigurationError": "Unknown",
+    'Module::SystemError': 'System',
+    'Module::RemoteError': 'Remote',
+    'Module::ConfigurationError': 'Unknown'
   };
   const transactionsMapper = (transactions) => {
     return transactions.map((transaction) => ({
       id: transaction.id,
       status: transaction.status,
       created_at: new Date(transaction.created_at)
-        .toLocaleString("en-GB", {
-          year: "2-digit",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
+        .toLocaleString('en-GB', {
+          year: '2-digit',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
         })
-        .replace(",", "")
-        .replace(/\//g, "-"),
+        .replace(',', '')
+        .replace(/\//g, '-'),
       merchant_name: transaction.merchant_name,
-      type: transaction.type.replace("Transaction", ""),
-      error_class: transaction.error_class
-        ? errorClassMap[transaction.error_class]
-        : "",
+      type: transaction.type.replace('Transaction', ''),
+      error_class: transaction.error_class ? errorClassMap[transaction.error_class] : '',
       card_holder: transaction.card_holder,
       card_number: transaction.card_number,
       amount: parseFloat(transaction.amount / 100).toFixed(2),
       currency: transaction.currency,
-      isoDate: transaction.created_at,
+      isoDate: transaction.created_at
     }));
   };
 
@@ -53,37 +51,34 @@ const HomePage = () => {
     initializeData();
   }, []);
   const handleSort = (col) => {
-    if (order === "asc") {
+    if (order === 'asc') {
       const sorted = [...data].sort((a, b) => (a[col] > b[col] ? 1 : -1));
       setData(sorted);
-      setOrder("desc");
+      setOrder('desc');
     }
-    if (order === "desc") {
+    if (order === 'desc') {
       const sorted = [...data].sort((a, b) => (a[col] < b[col] ? 1 : -1));
       setData(sorted);
-      setOrder("asc");
+      setOrder('asc');
     }
   };
+
   return (
     <>
-      <SearchArea
-        transactions={data}
-        setTransactionsData={setData}
-        resetData={initializeData}
-      />
+      <SearchArea transactions={data} setTransactionsData={setData} resetData={initializeData} />
       <table className="table">
         <thead>
           <tr className="headRow">
             <th>ID</th>
-            <th onClick={() => handleSort("status")}>Status</th>
-            <th onClick={() => handleSort("created_at")}>Created At</th>
-            <th onClick={() => handleSort("merchant_name")}>Merchant Name</th>
-            <th onClick={() => handleSort("type")}>Type</th>
-            <th onClick={() => handleSort("error_class")}>Error Class</th>
-            <th onClick={() => handleSort("card_holder")}>Card Holder</th>
-            <th onClick={() => handleSort("card_number")}>Card Number</th>
-            <th onClick={() => handleSort("amount")}>Amount</th>
-            <th onClick={() => handleSort("currency")}>Currency</th>
+            <th onClick={() => handleSort('status')}>Status</th>
+            <th onClick={() => handleSort('created_at')}>Created At</th>
+            <th onClick={() => handleSort('merchant_name')}>Merchant Name</th>
+            <th onClick={() => handleSort('type')}>Type</th>
+            <th onClick={() => handleSort('error_class')}>Error Class</th>
+            <th onClick={() => handleSort('card_holder')}>Card Holder</th>
+            <th onClick={() => handleSort('card_number')}>Card Number</th>
+            <th onClick={() => handleSort('amount')}>Amount</th>
+            <th onClick={() => handleSort('currency')}>Currency</th>
           </tr>
         </thead>
         <tbody>
@@ -92,9 +87,7 @@ const HomePage = () => {
               <td>{transaction.id}</td>
               <td>{transaction.status}</td>
               <td>
-                <Link to={`/transaction/${transaction.id}`}>
-                  {transaction.created_at}
-                </Link>
+                <Link to={`/transaction/${transaction.id}`}>{transaction.created_at}</Link>
               </td>
               <td>{transaction.merchant_name}</td>
               <td>{transaction.type}</td>

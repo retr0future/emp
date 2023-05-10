@@ -6,7 +6,10 @@
   "scripts": {
     "start": "webpack-dev-server .",
     "build": "Webpack .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "repository": {
     "type": "git",
@@ -27,11 +30,15 @@
     "@babel/runtime": "^7.21.0",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
-    "eslint": "^8.38.0",
+    "eslint": "^8.40.0",
     "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-jest": "^27.2.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
     "path": "^0.12.7",
+    "prettier": "^2.8.8",
     "style-loader": "^3.3.2",
     "webpack": "^5.79.0",
     "webpack-cli": "^5.0.1",

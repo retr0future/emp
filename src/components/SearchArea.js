@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import "./SearchArea.css";
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import './SearchArea.css';
 
 const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [filters, setFilters] = useState([]);
   const [selectedColumn, setSelectedColumn] = useState();
-  const [matchBy, setMatchBy] = useState("equal");
-  const [value, setValue] = useState("");
+  const [matchBy, setMatchBy] = useState('equal');
+  const [value, setValue] = useState('');
   const filteredColumns = useSelector(({ data }) => data.filteredColumns);
   const [results, setSearchResults] = useState([]);
   const [columns, setColumns] = useState(filteredColumns);
@@ -14,9 +14,9 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
     if (!selectedColumn) return;
     if (filters.some((filter) => filter.column === selectedColumn)) return;
     setFilters([...filters, { column: selectedColumn, matchBy, value }]);
-    setSelectedColumn("");
-    setMatchBy("equal");
-    setValue("");
+    setSelectedColumn('');
+    setMatchBy('equal');
+    setValue('');
   };
   const handleSelectColumn = (e) => {
     const selected = e.target.value;
@@ -49,23 +49,12 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const handleSearch = (event) => {
     event.preventDefault();
     let filteredTransactions = [...transactions];
-    const fromDate = new Date(document.getElementById("date-range-from").value);
+    const fromDate = new Date(document.getElementById('date-range-from').value);
     const toDate =
-      new Date(document.getElementById("date-range-to").value) ===
-      "Invalid Date"
-        ? new Date(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate(),
-            23,
-            59,
-            59
-          )
-        : new Date(document.getElementById("date-range-to").value);
-    if (
-      fromDate.toString() !== "Invalid Date" &&
-      toDate.toString() !== "Invalid Date"
-    ) {
+      new Date(document.getElementById('date-range-to').value) === 'Invalid Date'
+        ? new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59)
+        : new Date(document.getElementById('date-range-to').value);
+    if (fromDate.toString() !== 'Invalid Date' && toDate.toString() !== 'Invalid Date') {
       filteredTransactions = transactions.filter((transaction) => {
         const transactionDate = new Date(transaction.isoDate);
         return (
@@ -80,13 +69,13 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
       filteredTransactions = filteredTransactions.filter((transaction) => {
         const transactionValue = transaction[column].toString();
         switch (matchBy) {
-          case "equal":
+          case 'equal':
             return transactionValue === value;
-          case "starts_with":
+          case 'starts_with':
             return transactionValue.startsWith(value);
-          case "ends_with":
+          case 'ends_with':
             return transactionValue.endsWith(value);
-          case "contains":
+          case 'contains':
             return transactionValue.includes(value);
           default:
             return true;
@@ -100,20 +89,11 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   return (
     <div className="SearchBar">
       <label htmlFor="date-range">Date range:</label>
-      <input
-        type="datetime-local"
-        id="date-range-from"
-        name="date-range-from"
-      />
+      <input type="datetime-local" id="date-range-from" name="date-range-from" />
       <input type="datetime-local" id="date-range-to" name="date-range-to" />
       <br />
       <label htmlFor="filters">Filters:</label>
-      <select
-        id="filters"
-        name="filters"
-        value={selectedColumn}
-        onChange={handleSelectColumn}
-      >
+      <select id="filters" name="filters" value={selectedColumn} onChange={handleSelectColumn}>
         <option value="" disabled>
           Select a filter
         </option>
