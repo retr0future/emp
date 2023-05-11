@@ -5,6 +5,12 @@
   flex-direction: column;
   align-items: center;
 }
+.SearchBar p {
+  color: #fff
+}
 label, input, select, button{
 margin: 10px;
+}
+label {
+  color: #fff
 }

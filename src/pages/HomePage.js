@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import './HomePage.css';
 import PaymentTransactions from '../PaymentTransactions';
 import { Link } from 'react-router-dom';
-import { getData } from '../store/data';
+import { getData, setMappedData } from '../store/data';
 import SearchArea from '../components/SearchArea';
 
 const HomePage = () => {
@@ -46,6 +46,7 @@ const HomePage = () => {
     const mappedTransactions = transactionsMapper(transactions);
     setData(mappedTransactions);
     dispatch(getData(transactions));
+    dispatch(setMappedData(mappedTransactions));
   };
   useEffect(() => {
     initializeData();
