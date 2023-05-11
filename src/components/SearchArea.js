@@ -8,8 +8,8 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [selectedColumn, setSelectedColumn] = useState();
   const [matchBy, setMatchBy] = useState('equal');
   const [value, setValue] = useState('');
-  const [columns, setColumns] = useState(filteredColumns);
   const filteredColumns = useSelector(({ data }) => data.filteredColumns);
+  const [columns, setColumns] = useState(filteredColumns);
   const initialTransActionData = useSelector(({ data }) => data.mappedData);
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
