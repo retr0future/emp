@@ -1,7 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './SearchArea.css';
 import { filterArrayByDateRange, applyFilters } from './utils';
+import FilterTable from './FilterTable';
+import DateRangePicker from './DataRangePicker';
+import { setRange } from '../store/data';
+import PropTypes from 'prop-types';
 
 const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [filters, setFilters] = useState([]);
@@ -10,9 +14,8 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   const [value, setValue] = useState('');
   const filteredColumns = useSelector(({ data }) => data.filteredColumns);
   const [columns, setColumns] = useState(filteredColumns);
+  const dispatch = useDispatch();
   const initialTransActionData = useSelector(({ data }) => data.mappedData);
-  const fromDateRef = useRef(null);
-  const toDateRef = useRef(null);
   const handleAddFilter = () => {
     if (!selectedColumn) return;
     if (filters.some((filter) => filter.column === selectedColumn)) return;
@@ -34,9 +37,9 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
   };
   const handleReset = () => {
     resetData();
-    fromDateRef.current.value = '';
-    toDateRef.current.value = '';
     setFilters([]);
+    setColumns(filteredColumns);
+    dispatch(setRange({ fromDate: '', toDate: '' }));
   };
   const handleRemoveFilter = (index) => {
     const newFilters = [...filters];
@@ -51,9 +54,9 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
     setColumns(updatedColumns);
     handleSearch();
   };
+  const dateObj = useSelector(({ data }) => data.dateRange);
   const handleSearch = () => {
-    const fromDate = new Date(fromDateRef.current.value);
-    const toDate = new Date(toDateRef.current.value);
+    const { fromDate, toDate } = dateObj;
     const filteredTransactions = filterArrayByDateRange(initialTransActionData, fromDate, toDate);
     const updatedTransactions = applyFilters(filteredTransactions, filters);
     setTransactionsData(updatedTransactions);
@@ -64,23 +67,7 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
 
   return (
     <div className="SearchBar">
-      <form>
-        <label htmlFor="date-range">Date range:</label>
-        <input
-          type="datetime-local"
-          id="date-range-from"
-          name="date-range-from"
-          ref={fromDateRef}
-        />
-        <input type="datetime-local" id="date-range-to" name="date-range-to" ref={toDateRef} />
-        <button type="button" onClick={handleSearch}>
-          Search
-        </button>
-      </form>
-      {/*      <DateRangePicker></DateRangePicker> */}
-      <button type="button" onClick={handleSearch}>
-        Search
-      </button>
+      <DateRangePicker handleSearch={handleSearch} />
       <br />
       <label htmlFor="filters">Filters:</label>
       <select id="filters" name="filters" value={selectedColumn} onChange={handleSelectColumn}>
@@ -99,7 +86,7 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
         <p>Selected Filters</p>
         {selectedColumn && (
           <div>
-            {selectedColumn}
+            <span className="SearchBarText">{selectedColumn}</span>
             <select value={matchBy} onChange={(e) => setMatchBy(e.target.value)}>
               <option value="equal">Equal</option>
               <option value="starts_with">Starts with</option>
@@ -119,23 +106,17 @@ const SearchArea = ({ transactions, setTransactionsData, resetData }) => {
           </div>
         )}
       </div>
-      <div className="FilterBar">
-        {filters.map((filter, index) => (
-          <div key={index}>
-            <span>
-              {filter.column} {filter.matchBy} {filter.value}
-            </span>
-            <button type="button" onClick={() => handleRemoveFilter(index)}>
-              Remove filter
-            </button>
-          </div>
-        ))}
-        <button type="button" onClick={handleReset}>
-          Reset
-        </button>
-      </div>
+      <FilterTable
+        handleRemoveFilter={handleRemoveFilter}
+        handleReset={handleReset}
+        filters={filters}
+      />
     </div>
   );
 };
-
+SearchArea.propTypes = {
+  transactions: PropTypes.array,
+  setTransactionsData: PropTypes.func,
+  resetData: PropTypes.func
+};
 export default SearchArea;

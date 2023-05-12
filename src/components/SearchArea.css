@@ -9,8 +9,18 @@
   color: #fff
 }
 label, input, select, button{
-margin: 10px;
+ margin: 10px;
 }
 label {
   color: #fff
+}
+.FilterBar {
+ display: flex;
+ justify-content: center;
+ margin: 10px;
+ flex-direction: column;
+ align-items: center;
+}
+.SearchBarText {
+ color: #fff
 }

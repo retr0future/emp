@@ -1,9 +1,9 @@
 export const filterArrayByDateRange = (array, fromDate, toDate) => {
-  if (fromDate.toString() === 'Invalid Date' && toDate.toString() === 'Invalid Date') {
+  if (!fromDate && !toDate) {
     return array;
-  } else if (fromDate.toString() === 'Invalid Date') {
+  } else if (!fromDate) {
     return array.filter((item) => new Date(item.isoDate) <= new Date(toDate));
-  } else if (toDate.toString() === 'Invalid Date') {
+  } else if (!toDate) {
     return array.filter((item) => new Date(item.isoDate) >= new Date(fromDate));
   } else {
     return array.filter((item) => {
