@@ -37,7 +37,7 @@ const HomePage = () => {
 
   return (
     <>
-      <SearchArea transactions={data} setTransactionsData={setData} resetData={initializeData} />
+      <SearchArea setTransactionsData={setData} resetData={initializeData} />
       <table className="table">
         <thead>
           <tr className="headRow">

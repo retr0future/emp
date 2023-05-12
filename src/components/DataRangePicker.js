@@ -38,7 +38,7 @@ const DateRangePicker = ({ handleSearch }) => {
           onBlur={handleBlur}
         />
         <button type="button" onClick={handleSearch}>
-          Search
+          Apply
         </button>
       </form>
     </div>

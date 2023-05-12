@@ -13,7 +13,9 @@ const initialState = {
     { columnName: 'amount', id: 8, show: true }
   ],
   mappedData: [],
-  dateRange: { fromDate: '', toDate: '' }
+  dateRange: { fromDate: '', toDate: '' },
+  activeFilters: [],
+  selectedColumn: ''
 };
 
 const dataSlice = createSlice({
@@ -24,16 +26,35 @@ const dataSlice = createSlice({
       return { ...state, data: action.payload };
     },
     setRange: (state, action) => {
-      return {
-        ...state,
-        dateRange: action.payload
-      };
+      return { ...state, dateRange: action.payload };
     },
     setMappedData: (state, action) => {
       return { ...state, mappedData: action.payload };
+    },
+    setActiveFilters: (state, action) => {
+      return { ...state, activeFilters: action.payload };
+    },
+    setSelectedColumn: (state, action) => {
+      return { ...state, selectedColumn: action.payload };
+    },
+    setColumns: (state, action) => {
+      return { ...state, filteredColumns: action.payload };
+    },
+    resetColumns: (state, action) => {
+      const { payload } = action;
+      const resetColumns = payload.map((obj) => ({ ...obj, show: true }));
+      return { ...state, filteredColumns: resetColumns };
     }
   }
 });
 
-export const { getData, setRange, setMappedData } = dataSlice.actions;
+export const {
+  getData,
+  setRange,
+  setMappedData,
+  setActiveFilters,
+  setSelectedColumn,
+  setColumns,
+  resetColumns
+} = dataSlice.actions;
 export default dataSlice.reducer;

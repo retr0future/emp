@@ -1,7 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { setActiveFilters, setColumns } from '../store/data';
 
-const FilterTable = ({ filters, handleRemoveFilter, handleReset }) => {
+const FilterTable = ({ handleReset, handleSearch }) => {
+  const filters = useSelector(({ data }) => data.activeFilters);
+  const columns = useSelector(({ data }) => data.filteredColumns);
+  const dispatch = useDispatch();
+  const handleRemoveFilter = (index) => {
+    const newFilters = [...filters];
+    newFilters.splice(index, 1);
+    const updatedColumns = columns.map((column) => {
+      if (column.columnName === filters[index].column) {
+        return { ...column, show: true };
+      }
+      return column;
+    });
+    dispatch(setActiveFilters(newFilters));
+    dispatch(setColumns(updatedColumns));
+    handleSearch();
+  };
   return (
     <div className="FilterBar">
       <table className="table">
@@ -18,9 +36,11 @@ const FilterTable = ({ filters, handleRemoveFilter, handleReset }) => {
               <td> {filter.column}</td>
               <td>{filter.matchBy}</td>
               <td>{filter.value}</td>
-              <button type="button" onClick={() => handleRemoveFilter(index)}>
-                Remove filter
-              </button>
+              <td>
+                <button type="button" onClick={() => handleRemoveFilter(index)}>
+                  Remove filter
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -32,8 +52,7 @@ const FilterTable = ({ filters, handleRemoveFilter, handleReset }) => {
   );
 };
 FilterTable.propTypes = {
-  filters: PropTypes.array,
-  handleRemoveFilter: PropTypes.func,
+  handleSearch: PropTypes.func,
   handleReset: PropTypes.func
 };
 export default FilterTable;
