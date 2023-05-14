@@ -17,7 +17,6 @@ describe('DateRangePicker', () => {
         dateRange: { fromDate: '', toDate: '' }
       }
     });
-    //store.dispatch({ type: 'data/setRange', payload: { fromDate: '', toDate: '' } });
     component = render(
       <Provider store={store}>
         <DateRangePicker handleSearch={handleSearch} />

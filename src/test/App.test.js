@@ -1,12 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from '../App.js';
-import TransactionPage from '../pages/TransactionPage.js';
-import store from '../store/index.js';
-
-global.Request = jest.fn(() => ({}));
 
 describe('App', () => {
   test('renders home page by default', () => {

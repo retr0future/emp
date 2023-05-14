@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import './HomePage.css';
 import PaymentTransactions from '../PaymentTransactions';
@@ -11,14 +11,14 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState('asc');
   const [data, setData] = useState([]);
-  const initializeData = () => {
+  const initializeData = useCallback(() => {
     const paymentTransactions = new PaymentTransactions();
     const transactions = paymentTransactions.getTransactions();
     const mappedTransactions = transactionsMapper(transactions);
     setData(mappedTransactions);
     dispatch(getData(transactions));
     dispatch(setMappedData(mappedTransactions));
-  };
+  }, []);
   useEffect(() => {
     initializeData();
   }, []);

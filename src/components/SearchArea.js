@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import './SearchArea.css';
 import { filterArrayByDateRange, applyFilters } from './utils';
@@ -16,12 +16,12 @@ const SearchArea = ({ setTransactionsData, resetData }) => {
   const filters = useSelector(({ data }) => data.activeFilters);
   const dateObj = useSelector(({ data }) => data.dateRange);
 
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
     resetData();
     dispatch(setActiveFilters([]));
     dispatch(resetColumns(filteredColumns));
     dispatch(setRange({ fromDate: '', toDate: '' }));
-  };
+  }, []);
 
   const handleSearch = () => {
     const { fromDate, toDate } = dateObj;
@@ -31,7 +31,7 @@ const SearchArea = ({ setTransactionsData, resetData }) => {
   };
   useEffect(() => {
     handleSearch();
-  }, [filters]);
+  }, [JSON.stringify(filters)]);
 
   return (
     <div className="SearchBar">
