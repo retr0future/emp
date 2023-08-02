@@ -31,7 +31,7 @@ const SearchArea = ({ setTransactionsData, resetData }) => {
   };
   useEffect(() => {
     handleSearch();
-  }, [JSON.stringify(filters)]);
+  }, [filters]);
 
   return (
     <div className="SearchBar">
